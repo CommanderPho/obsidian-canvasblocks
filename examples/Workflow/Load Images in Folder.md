@@ -58,9 +58,10 @@ png_files = list(directory.glob("*.png"))
 # Load each image as a PIL Image object
 images = {}
 
+node_ids = []
 
-# Create a group to contain all the images
-group_id = create_group(f"Images from {directory.name}", script_data["x"], script_data["y"]+script_data["height"]+50)
+## Create a group to contain all the images
+# group_id = create_group(f"Images from {directory.name}", script_data["x"], script_data["y"]+script_data["height"]+50)
 
 limit_max_num_nodes_added = 6
 
