@@ -85,9 +85,20 @@ for file_path in png_files:
             # ratio = width / float(img.size[0])
             # height = int(ratio * img.size[1])
             
-            html_img_tag = build_img_html_tag(img)
-            # Create the node and get its ID
-            node_id = create_text_node(html_img_tag, (script_data["x"] + curr_horizontal_offset_x), script_data["y"]+script_data["height"]+120, width=img_width, height=img_height)
+            # html_img_tag = build_img_html_tag(img)
+            # # Create the node and get its ID
+            # node_id = create_text_node(html_img_tag, (script_data["x"] + curr_horizontal_offset_x), script_data["y"]+script_data["height"]+120, width=img_width, height=img_height)
+
+			# Save the image to the vault
+			image_name = f"{filename}.png"
+			image_file = os.path.join(plugin_folder, image_name)
+			image_file_absolute = os.path.join(vault_path, image_file)
+			image.save(image_file_absolute)
+
+			# Create a file node pointing to that image
+			node_id = create_file_node(image_file, (script_data["x"] + curr_horizontal_offset_x), script_data["y"]+script_data["height"]+120, width=img_width, height=img_height)
+
+
 			# Add the node ID to our list
             node_ids.append(node_id)
             curr_horizontal_offset_x += img_width
