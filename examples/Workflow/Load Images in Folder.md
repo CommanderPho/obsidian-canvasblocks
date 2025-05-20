@@ -9,8 +9,8 @@ modified: 2025-05-20T04:17:33-04:00
 		"ImageParentFolder": {
 			"direction": "input",
 			"type": "file"
-		}
-	
+		},
+			
 	}
 }
 ```
@@ -58,6 +58,10 @@ png_files = list(directory.glob("*.png"))
 # Load each image as a PIL Image object
 images = {}
 
+
+# Create a group to contain all the images
+group_id = create_group(f"Images from {directory.name}", script_data["x"], script_data["y"]+script_data["height"]+50)
+
 limit_max_num_nodes_added = 6
 
 num_nodes_added: int = 0
@@ -81,7 +85,10 @@ for file_path in png_files:
             # height = int(ratio * img.size[1])
             
             html_img_tag = build_img_html_tag(img)
-            create_text_node(html_img_tag, (script_data["x"] + curr_horizontal_offset_x), script_data["y"]+script_data["height"]+120, width=img_width, height=img_height)
+            # Create the node and get its ID
+            node_id = create_text_node(html_img_tag, (script_data["x"] + curr_horizontal_offset_x), script_data["y"]+script_data["height"]+120, width=img_width, height=img_height)
+			# Add the node ID to our list
+            node_ids.append(node_id)
             curr_horizontal_offset_x += img_width
             num_nodes_added += 1
         
@@ -89,34 +96,10 @@ for file_path in png_files:
             print(f"Error loading {file_path}: {e}")
 
 
-# Get the sorted keys
-# sorted_keys = sorted(images.keys(), key=extract_index)
+# Add all nodes to the group
+add_nodes_to_group(group_id, node_ids)
 
-# Create a dictionary with sorted images
-# sorted_images_dict = {key: images[key] for key in sorted_keys}
+# Optionally, notify the user
+notice(f"Added {num_nodes_added} images to group")
 
-# out_data["AllLoadedImagesDict"] = images
-
-# Convert the image to bytes
-#img_byte_array = io.BytesIO()
-#img.save(img_byte_array, format=img.format)
-#img_byte_array = img_byte_array.getvalue()
-
-# Convert the bytes to base64
-#base64_str = base64.b64encode(img_byte_array).decode('utf-8')
-
-# Create HTML image tag
-#html_img_tag = f'<img src="data:image/png;base64,{base64_str}" alt="Image">'
-#create_text_node(html_img_tag, script_data["x"], #script_data["y"]+script_data["height"]+120, 400, 400)
-
-# example_path = Path(r"C:\Users\pho\repos\Spike3DWorkEnv\Spike3D\output\collected_outputs\2025-05-20\gor01_one_2006-6-12_15-55-31_normal_computed_[1, 2, 4, 6, 7, 9]_5.0\laps\psuedo2D_nan_filled\raw_rgba").resolve()
-
-# name = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
-# image_name = f"Save_{name}.png"
-# image_file =  os.path.join(plugin_folder, image_name)
-# image_file_absolute = os.path.join(vault_path, image_file)
-
-# in_data["Image"].save(image_file_absolute)
-
-# create_file_node(image_file, script_data["x"], script_data["y"]+script_data["height"]+120)
 ```
